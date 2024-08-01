@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { singUP } from "@harshith6322/medium-common";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API } from "../tsconfig";
@@ -12,6 +12,17 @@ function Auth({ typelogin }: { typelogin: "Signup" | "Signin" }) {
     email: "",
   });
   const nav = useNavigate();
+
+  useEffect(() => {
+    // Check if the token exists when the component mounts
+    const token = localStorage.getItem("token");
+    if (token) {
+      // Redirect to sign-in page if not authenticated
+      nav("/blogs");
+    } else {
+      nav("/signin");
+    }
+  }, [nav]);
 
   //api fetch using axois
   async function handle_up() {

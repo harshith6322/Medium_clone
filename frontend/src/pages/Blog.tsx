@@ -1,17 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { useId } from "../hooks";
 import { useNavigate, useParams } from "react-router-dom";
 import { Avatar } from "../components/BlogCard";
 import App_Bar from "../components/App_Bar";
+import { useEffect } from "react";
 
-function Blog() {
+function Blog(): JSX.Element | null {
   const { id } = useParams<{ id: string }>();
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   //@ts-expect-error
   const { blog, loading } = useId({ id });
   const nav = useNavigate();
-  const token = localStorage.getItem("token");
-  if (!token) return nav("/signin");
+  useEffect(() => {
+    // Check if the token exists when the component mounts
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // Redirect to sign-in page if not authenticated
+      nav("/signin");
+    }
+  }, [nav]);
 
   if (loading)
     return (
